@@ -36,4 +36,7 @@ ax.add_patch(patch)
 # Plot scatter plot
 ax.scatter(points[:, 0], points[:, 1])
 ax.plot(polygon[:, 0], polygon[:, 1])
+
+#plot a scatter plot with output points
+ax.scatter(polygon[:, 0], polygon[:, 1], c='r', s=50)
 plt.show()

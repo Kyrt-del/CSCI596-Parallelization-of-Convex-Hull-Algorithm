@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-// #include <mpi.h>
 
 // Function to determine the orientation of three points (p, q, r)
 int orientation(const double *p, const double *q, const double *r)
@@ -46,7 +45,7 @@ void computeConvexHull2(const double *points, int size, double **convexHull, int
             leftmost_count += 1;
         }
     }
- 
+
     // make an array of array containing polar angles of all points from leftmost point
     int polarAnglesSize = size - leftmost_count;
     double **polarAngles = malloc(polarAnglesSize * sizeof(double *));
@@ -66,7 +65,7 @@ void computeConvexHull2(const double *points, int size, double **convexHull, int
 
     // sort the polar angles array based on polar angles
     qsort(polarAngles, polarAnglesSize, sizeof(double *), comparePoints2);
- 
+
     // make a stack and push the leftmost point and the point with the smallest polar angle
     int *stack = malloc(size * sizeof(int));
     int top = -1;
@@ -157,22 +156,13 @@ void computeConvexHull(const double *points, int size, double **convexHull, int 
 
 int main(int argc, char **argv)
 {
-    // MPI_Init(&argc, &argv);
-
-    // int rank, size;
-    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    // MPI_Comm_size(MPI_COMM_WORLD, &size);
-
     int totalPoints = 0;
     double *allPoints = NULL;
 
-    // if (rank == 0) {
-    //  Master process reads points from file
     FILE *file = fopen("input.txt", "r");
     if (!file)
     {
         fprintf(stderr, "Error opening the file.\n");
-        // MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
     // Count the total number of points
@@ -188,12 +178,10 @@ int main(int argc, char **argv)
     }
 
     fclose(file);
-    //}
 
-    // Each MPI process computes the Convex Hull for its subset of points
     double *localConvexHull;
     int localConvexHullSize;
-    // computeConvexHull(localPoints, pointsPerProcess, &localConvexHull, &localConvexHullSize);
+
     computeConvexHull2(allPoints, totalPoints, &localConvexHull, &localConvexHullSize);
 
     // Write local convex hull points to output file
@@ -207,11 +195,5 @@ int main(int argc, char **argv)
     }
     fclose(outputFile);
 
-    // Free allocated memory
-    // free(allPoints);
-    // free(localPoints);
-    // free(localConvexHull);
-
-    // MPI_Finalize();
     return 0;
 }
